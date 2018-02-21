@@ -1,0 +1,51 @@
+{
+    "kind": "BuildConfig",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "puppetboard-build"
+    },
+    "spec": {
+        "triggers": [],
+        "runPolicy": "Serial",
+        "source": {
+            "type": "Git",
+            "git": {
+                "uri": "https://github.com/jweisner/openshift-puppetboard.git"
+            }
+        },
+        "strategy": {
+            "type": "Docker",
+            "dockerStrategy": {
+                "from": {
+                    "kind": "DockerImage",
+                    "name": "puppet/puppetboard:latest"
+                }
+            }
+        },
+        "output": {
+            "to": {
+                "kind": "ImageStreamTag",
+                "name": "puppetboard:latest"
+            }
+        },
+        "resources": {},
+        "postCommit": {},
+        "nodeSelector": null
+    }
+}
+{
+    "kind": "ImageStream",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "puppetboard",
+        "namespace": "puppet"
+    },
+    "spec": {
+        "lookupPolicy": {
+            "local": false
+        }
+    },
+    "status": {
+        "dockerImageRepository": "docker-registry.default.svc:5000/puppet/puppetboard"
+    }
+}
